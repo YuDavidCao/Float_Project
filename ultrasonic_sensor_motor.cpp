@@ -1,17 +1,12 @@
 #include <Servo.h>
 
-/*
-The 88 value is used to stop the motor for continuous rotation servos.
-The neutral value is supposed to be 90 but it's offset by 2
-*/
-
 // Define pins
 const int trigPin = 9;
 const int echoPin = 10;
 const int motorPin = 11;
 
 // Define maximum distance to trigger the motor (in centimeters)
-const int triggerDistance = 10;
+const int triggerDistance = 100;
 
 // Create a servo object
 Servo continuousServo;
@@ -49,11 +44,15 @@ void loop() {
   Serial.print("Distance: ");
   Serial.println(distance);
 
-  // If the distance is less than the trigger distance, start the motor
+  // If the distance is within the trigger distance, adjust speed proportionally
   if (distance < triggerDistance) {
-    continuousServo.write(180);  // Full speed forward
+    // Map distance to servo speed (0 for fast, 88 for stop)
+    // int speed = map(distance, 0, triggerDistance, 0, 88);
+    float proportion = min(distance, triggerDistance) / (float)triggerDistance;
+    int s = proportion * 88;
+    continuousServo.write(s);  // Adjust motor speed based on distance
   } else {
-    continuousServo.write(88);   // Stop the motor
+    continuousServo.write(88);  // Stop the motor
   }
   
   delay(200);  // Small delay for readability
