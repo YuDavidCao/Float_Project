@@ -6,7 +6,7 @@ const int echoPin = 10;
 const int motorPin = 11;
 
 // Define maximum distance to trigger the motor (in centimeters)
-const int triggerDistance = 100;
+const int triggerDistance = 50;
 
 // Create a servo object
 Servo continuousServo;
@@ -49,7 +49,7 @@ void loop() {
     // Map distance to servo speed (0 for fast, 88 for stop)
     // int speed = map(distance, 0, triggerDistance, 0, 88);
     float proportion = min(distance, triggerDistance) / (float)triggerDistance;
-    int s = proportion * 88;
+    int s = sqrt(sqrt(sqrt(proportion))) * 88;
     continuousServo.write(s);  // Adjust motor speed based on distance
   } else {
     continuousServo.write(88);  // Stop the motor
